@@ -119,6 +119,25 @@
       font-weight: 600;
       color: #1a1a2e;
     }
+
+    /* ── MOBILE ── */
+    @media (max-width: 500px) {
+      body { padding: 12px 8px; }
+
+      h1 { font-size: 1.2rem; }
+      .subtitle { font-size: 0.8rem; }
+      .legend { gap: 10px; font-size: 0.75rem; }
+
+      /* Hide 分段距离 — always "1.00 公里", saves a whole column */
+      thead th:nth-child(2),
+      tbody td:nth-child(2) { display: none; }
+
+      thead th { padding: 10px 6px; font-size: 0.75rem; }
+      tbody td  { padding: 7px 5px;  font-size: 0.78rem; white-space: normal; }
+
+      .gate-badge { font-size: 0.6rem; padding: 2px 4px; }
+      .buf        { font-size: 0.62rem; }
+    }
   </style>
 </head>
 <body>
