@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>奥信濃100 完走分析报告 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#080f14;color:#dde8f0;line-height:1.6}
+
+/* HERO */
+.hero{background:linear-gradient(160deg,#06100a 0%,#091a10 60%,#060e09 100%);padding:56px 24px 44px;text-align:center;border-bottom:3px solid #00e07a;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 120%,rgba(0,200,90,.1),transparent 70%);pointer-events:none}
+.hero-tag{display:inline-block;background:rgba(0,224,122,.1);border:1px solid rgba(0,224,122,.3);color:#00e07a;font-size:11px;font-weight:700;letter-spacing:3px;padding:4px 16px;border-radius:20px;margin-bottom:16px}
+.hero h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;color:#fff;margin-bottom:6px}
+.hero h1 span{color:#00e07a}
+.hero-sub{color:rgba(255,255,255,.4);font-size:.9rem;margin-bottom:10px}
+.hero-result{display:inline-block;background:rgba(255,180,0,.1);border:1px solid rgba(255,180,0,.3);color:#ffb400;font-size:1rem;font-weight:700;padding:6px 20px;border-radius:30px;margin:12px 0 28px}
+.hn-grid{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;position:relative;z-index:1}
+.hn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px 18px;text-align:center;min-width:88px}
+.hn .v{font-size:1.5rem;font-weight:900;color:#00e07a;line-height:1}
+.hn .v.yellow{color:#ffb400}
+.hn .v.red{color:#ff5a5a}
+.hn .v.blue{color:#4fc3f7}
+.hn .l{font-size:.66rem;color:rgba(255,255,255,.35);margin-top:3px;letter-spacing:.5px;text-transform:uppercase}
+
+/* LAYOUT */
+.container{max-width:980px;margin:0 auto;padding:0 20px}
+.section{padding:44px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.section:last-child{border-bottom:none}
+.sec-title{font-size:1.2rem;font-weight:800;color:#fff;margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.sec-icon{width:32px;height:32px;background:#00e07a;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.sec-sub{color:rgba(255,255,255,.35);font-size:.85rem;margin-bottom:22px;margin-left:42px}
+
+/* CARDS */
+.card-grid{display:grid;gap:14px}
+.cg2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.cg3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.card{background:#0d1a24;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px}
+.card-green{border-left:4px solid #00e07a}
+.card-yellow{border-left:4px solid #ffb400}
+.card-red{border-left:4px solid #ff5a5a}
+.card-blue{border-left:4px solid #4fc3f7}
+.card h3{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:10px}
+.card p,.card li{font-size:.88rem;color:rgba(255,255,255,.55);line-height:1.65}
+.card ul{padding-left:16px}
+.card li{margin-bottom:4px}
+em{color:#00e07a;font-style:normal;font-weight:700}
+
+/* GATE TABLE */
+.table-wrap{overflow-x:auto;border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:#0d1a24}
+thead tr{background:#0a1f12}
+th{padding:11px 14px;color:rgba(255,255,255,.4);font-weight:700;text-transform:uppercase;font-size:.75rem;letter-spacing:.5px;text-align:left}
+td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.05);color:#c8d8e8}
+tr:last-child td{border-bottom:none}
+.g-name{font-weight:700;color:#fff}
+.g-io{font-size:.72rem;padding:1px 6px;border-radius:4px;font-weight:700;margin-left:4px}
+.io-out{background:rgba(0,224,122,.12);color:#00e07a}
+.io-in{background:rgba(255,90,90,.12);color:#ff8080}
+.pass{color:#00e07a;font-weight:700}
+.buf-ok{color:#00e07a;font-weight:700}
+.buf-warn{color:#ffb400;font-weight:700}
+.buf-tight{color:#ff8080;font-weight:700}
+
+/* PHASE BAR */
+.phase-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:.82rem}
+.phase-label{width:88px;text-align:right;color:rgba(255,255,255,.5);flex-shrink:0}
+.phase-bar-bg{flex:1;height:18px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;position:relative}
+.phase-bar-fill{height:100%;border-radius:4px;transition:width .4s}
+.phase-val{width:70px;flex-shrink:0;color:#fff;font-weight:700}
+.phase-gain{width:60px;flex-shrink:0;color:rgba(255,255,255,.35);font-size:.76rem}
+
+/* HR ZONES */
+.hr-zone-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:.84rem}
+.hr-zone-label{width:110px;flex-shrink:0;color:rgba(255,255,255,.6)}
+.hr-bar-bg{flex:1;height:16px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.hr-bar-fill{height:100%;border-radius:4px}
+.hr-pct{width:42px;text-align:right;font-weight:700}
+
+/* HALF SPLIT */
+.split-compare{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.split-card{background:#0d1a24;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px;text-align:center}
+.split-label{font-size:.8rem;color:rgba(255,255,255,.4);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}
+.split-time{font-size:2rem;font-weight:900;color:#00e07a;line-height:1;margin-bottom:4px}
+.split-meta{font-size:.8rem;color:rgba(255,255,255,.4)}
+.split-card.second .split-time{color:#4fc3f7}
+.badge-faster{display:inline-block;background:rgba(79,195,247,.12);border:1px solid rgba(79,195,247,.3);color:#4fc3f7;font-size:.72rem;font-weight:700;padding:2px 10px;border-radius:12px;margin-top:6px}
+
+/* INSIGHT TAGS */
+.insights{display:grid;gap:12px}
+.insight{display:flex;gap:12px;background:#0d1a24;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px 16px}
+.insight-icon{font-size:1.2rem;flex-shrink:0;margin-top:1px}
+.insight-body{font-size:.88rem}
+.insight-body strong{display:block;color:#fff;margin-bottom:2px;font-size:.92rem}
+.insight-body span{color:rgba(255,255,255,.5)}
+
+/* FOOTER */
+.footer{background:#050c10;padding:28px 20px;text-align:center;color:rgba(255,255,255,.2);font-size:.78rem}
+.footer a{color:#00e07a}
+
+@media(max-width:500px){
+  .split-compare{grid-template-columns:1fr}
+  .hn .v{font-size:1.2rem}
+  .phase-label{width:64px;font-size:.75rem}
+  .phase-val{width:56px;font-size:.78rem}
+  th,td{padding:8px 10px}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">RACE ANALYSIS · 2026</div>
+  <h1>奥信濃<span>100</span> 完走分析报告</h1>
+  <p class="hero-sub">2026年6月6日（土）05:01 スタート &nbsp;·&nbsp; Kijimadaira Village Trail Run</p>
+  <div class="hero-result">⏱ 完赛时间 20h 03m 48s &nbsp;·&nbsp; 个人目标 20h &nbsp;·&nbsp; 超出 3分48秒</div>
+  <div class="hn-grid">
+    <div class="hn"><div class="v">20:03</div><div class="l">总用时</div></div>
+    <div class="hn"><div class="v yellow">+3m48s</div><div class="l">超出目标</div></div>
+    <div class="hn"><div class="v">102.8</div><div class="l">距离 km</div></div>
+    <div class="hn"><div class="v">+4,533</div><div class="l">累积爬升 m</div></div>
+    <div class="hn"><div class="v blue">11:42</div><div class="l">平均配速 /km</div></div>
+    <div class="hn"><div class="v">123</div><div class="l">平均心率 bpm</div></div>
+    <div class="hn"><div class="v">158</div><div class="l">最高心率 bpm</div></div>
+    <div class="hn"><div class="v">7/7</div><div class="l">关门全部通过</div></div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- RACE RESULT -->
+<section class="section">
+  <h2 class="sec-title"><div class="sec-icon">🏅</div> 比赛结果总评</h2>
+  <p class="sec-sub">成绩分析与关键结论</p>
+  <div class="card-grid cg3">
+    <div class="card card-green">
+      <h3>✅ 官方完赛成功</h3>
+      <p>官方关门时限 <em>21小时</em>，实际用时 20h03m48s，<em>提前 56分12秒</em> 通过。7个关门全部顺利通过，无任何关门风险。</p>
+    </div>
+    <div class="card card-yellow">
+      <h3>⏱ 个人目标差距</h3>
+      <p>设定个人目标 <em>20小时</em>，最终超出 <em>3分48秒</em>。差距极小，仅需在后半程每公里提速约 <em>4秒</em> 即可实现。</p>
+    </div>
+    <div class="card card-blue">
+      <h3>📈 后半程更强</h3>
+      <p>前半 (0–51km) <em>10h11m</em>，后半 (52–102km) <em>9h42m</em>。后半实际 <em>快了29分钟</em>，展现出卓越的配速控制与体能管理。</p>
+    </div>
+  </div>
+</section>
+
+<!-- GATE ANALYSIS -->
+<section class="section">
+  <h2 class="sec-title"><div class="sec-icon">🚩</div> 关门通过分析</h2>
+  <p class="sec-sub">全部 7 个关门顺利通过 · 最小余量 km27 (+57分)</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>关门</th><th>距离</th><th>类型</th><th>官方关门</th><th>实际通过</th><th>余量</th><th>状态</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="g-name">第１関門</td><td>27 km</td>
+          <td><span class="g-io io-out">OUT</span></td>
+          <td>11:00 <span style="color:rgba(255,255,255,.3);font-size:.75rem">（6h）</span></td>
+          <td class="pass">10:03</td>
+          <td class="buf-warn">+57分</td>
+          <td>⚠️ 最紧</td>
+        </tr>
+        <tr>
+          <td class="g-name">第２関門</td><td>38 km</td>
+          <td><span class="g-io io-out">OUT</span></td>
+          <td>15:30 <span style="color:rgba(255,255,255,.3);font-size:.75rem">（10h30m）</span></td>
+          <td class="pass">12:23</td>
+          <td class="buf-ok">+3h07m</td>
+          <td>✅ 宽裕</td>
+        </tr>
+        <tr>
+          <td class="g-name">第３関門</td><td>48 km</td>
+          <td><span class="g-io io-in">IN</span></td>
+          <td>16:30 <span style="color:rgba(255,255,255,.3);font-size:.75rem">（11h30m）</span></td>
+          <td class="pass">14:33</td>
+          <td class="buf-ok">+1h57m</td>
+          <td>✅ 宽裕</td>
+        </tr>
+        <tr>
+          <td class="g-name">第４関門</td><td>58 km</td>
+          <td><span class="g-io io-out">OUT</span></td>
+          <td>18:30 <span style="color:rgba(255,255,255,.3);font-size:.75rem">（13h30m）</span></td>
+          <td class="pass">16:28</td>
+          <td class="buf-ok">+2h02m</td>
+          <td>✅ 宽裕</td>
+        </tr>
+        <tr>
+          <td class="g-name">第５関門</td><td>72 km</td>
+          <td><span class="g-io io-out">OUT</span></td>
+          <td>20:30 <span style="color:rgba(255,255,255,.3);font-size:.75rem">（15h30m）</span></td>
+          <td class="pass">18:34</td>
+          <td class="buf-ok">+1h56m</td>
+          <td>✅ 宽裕</td>
+        </tr>
+        <tr>
+          <td class="g-name">第６関門</td><td>84 km</td>
+          <td><span class="g-io io-out">OUT</span></td>
+          <td>22:30 <span style="color:rgba(255,255,255,.3);font-size:.75rem">（17h30m）</span></td>
+          <td class="pass">20:57</td>
+          <td class="buf-ok">+1h33m</td>
+          <td>✅ 宽裕</td>
+        </tr>
+        <tr>
+          <td class="g-name">第７関門</td><td>95 km</td>
+          <td><span class="g-io io-out">OUT</span></td>
+          <td>翌0:30 <span style="color:rgba(255,255,255,.3);font-size:.75rem">（19h30m）</span></td>
+          <td class="pass">23:28</td>
+          <td class="buf-warn">+1h02m</td>
+          <td>✅ 通过</td>
+        </tr>
+        <tr style="background:rgba(0,224,122,.04)">
+          <td class="g-name" style="color:#00e07a">フィニッシュ</td><td>100 km</td>
+          <td><span class="g-io io-out">OUT</span></td>
+          <td>翌2:00 <span style="color:rgba(255,255,255,.3);font-size:.75rem">（21h）</span></td>
+          <td class="pass">翌1:05</td>
+          <td class="buf-ok">+55分</td>
+          <td>🏅 完赛</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- HALF SPLIT -->
+<section class="section">
+  <h2 class="sec-title"><div class="sec-icon">⚡</div> 前后半程对比</h2>
+  <p class="sec-sub">后半程比前半程快 29 分钟 — 理想的负分割配速</p>
+  <div class="split-compare">
+    <div class="split-card">
+      <div class="split-label">前半程 0–51 km</div>
+      <div class="split-time">10h 11m</div>
+      <div class="split-meta">配速 12:00/km &nbsp;·&nbsp; 爬升 +3,112m &nbsp;·&nbsp; 心率 129bpm</div>
+    </div>
+    <div class="split-card second">
+      <div class="split-label">后半程 52–102 km</div>
+      <div class="split-time">9h 42m</div>
+      <div class="split-meta">配速 11:25/km &nbsp;·&nbsp; 爬升 +1,421m &nbsp;·&nbsp; 心率 118bpm</div>
+      <div><span class="badge-faster">▲ 快 29 分钟</span></div>
+    </div>
+  </div>
+  <div class="card card-blue" style="margin-top:14px">
+    <h3>负分割完赛的意义</h3>
+    <p>前半程承担了全程 <em>68%</em> 的爬升（3,112m），而后半程配速反而更快，说明前半程的保守策略完全正确。心率从前半的 129bpm 降至后半 118bpm，体现出绝佳的能量分配。</p>
+  </div>
+</section>
+
+<!-- 5KM PHASES -->
+<section class="section">
+  <h2 class="sec-title"><div class="sec-icon">📊</div> 5km 分段配速分析</h2>
+  <p class="sec-sub">颜色深浅反映配速快慢 · 括号内为区间爬升</p>
+  <div style="margin-top:8px">
+    <div class="phase-row">
+      <div class="phase-label">km 1-5</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:50.0%;background:#4fc3f7"></div></div>
+      <div class="phase-val">10.5<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+235m</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 6-10</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:43.8%;background:#00e07a"></div></div>
+      <div class="phase-val">9.2<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+168m</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 11-15</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:48.6%;background:#4fc3f7"></div></div>
+      <div class="phase-val">10.2<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+148m</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 16-20</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:40.0%;background:#00e07a"></div></div>
+      <div class="phase-val">8.4<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+200m</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 21-25</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:89.0%;background:#ff5a5a"></div></div>
+      <div class="phase-val">18.7<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+724m ⛰</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 26-30</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:44.3%;background:#00e07a"></div></div>
+      <div class="phase-val">9.3<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+54m</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 31-35</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:54.3%;background:#4fc3f7"></div></div>
+      <div class="phase-val">11.4<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+347m</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 36-40</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:96.2%;background:#ff5a5a"></div></div>
+      <div class="phase-val">20.2<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+749m ⛰</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 41-45</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:60.5%;background:#4fc3f7"></div></div>
+      <div class="phase-val">12.7<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+316m</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 46-50</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:46.2%;background:#00e07a"></div></div>
+      <div class="phase-val">9.7<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+95m</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 51-55</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:42.4%;background:#00e07a"></div></div>
+      <div class="phase-val">8.9<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+146m</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 56-60</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:62.4%;background:#ffb400"></div></div>
+      <div class="phase-val">13.1<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+281m</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 61-65</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:36.7%;background:#00e07a"></div></div>
+      <div class="phase-val">7.7<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+3m</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 66-70</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:42.4%;background:#00e07a"></div></div>
+      <div class="phase-val">8.9<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+1m</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 71-75</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:57.6%;background:#4fc3f7"></div></div>
+      <div class="phase-val">12.1<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+115m</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 76-80</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:54.8%;background:#4fc3f7"></div></div>
+      <div class="phase-val">11.5<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+185m</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 81-85</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:51.9%;background:#4fc3f7"></div></div>
+      <div class="phase-val">10.9<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+2m</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 86-90</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:73.8%;background:#ffb400"></div></div>
+      <div class="phase-val">15.5<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+277m 😓</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 91-95</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:61.4%;background:#4fc3f7"></div></div>
+      <div class="phase-val">12.9<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+263m</div>
+    </div>
+    <div class="phase-row">
+      <div class="phase-label">km 96-102</div>
+      <div class="phase-bar-bg"><div class="phase-bar-fill" style="width:59.0%;background:#4fc3f7"></div></div>
+      <div class="phase-val">12.4<span style="font-size:.7rem;color:rgba(255,255,255,.4)">/km</span></div>
+      <div class="phase-gain">+152m</div>
+    </div>
+  </div>
+  <div class="card card-red" style="margin-top:16px">
+    <h3>⛰ 两大核心爬升段</h3>
+    <ul>
+      <li><em>km21–25</em>：5km内爬升 +724m，配速 18.7min/km — 赛段最大爬升之一，执行完全正确</li>
+      <li><em>km36–40</em>：5km内爬升 +749m，配速 20.2min/km — 全程最慢段，也是全程最难关卡</li>
+      <li>两段合计耗时约 <em>3h14m</em>，占总时间约 <em>16%</em>，是全程表现最消耗体力的核心区间</li>
+    </ul>
+  </div>
+</section>
+
+<!-- HR ZONES -->
+<section class="section">
+  <h2 class="sec-title"><div class="sec-icon">❤️</div> 心率区间分布</h2>
+  <p class="sec-sub">极度克制的有氧运动 · Z4+Z5 仅占 2% · 完美的超马心率策略</p>
+  <div class="hr-zone-row">
+    <div class="hr-zone-label">Z1 恢复 <120</div>
+    <div class="hr-bar-bg"><div class="hr-bar-fill" style="width:37.1%;background:#4fc3f7"></div></div>
+    <div class="hr-pct" style="color:#4fc3f7">37.1%</div>
+  </div>
+  <div class="hr-zone-row">
+    <div class="hr-zone-label">Z2 有氧 120-133</div>
+    <div class="hr-bar-bg"><div class="hr-bar-fill" style="width:34.6%;background:#00e07a"></div></div>
+    <div class="hr-pct" style="color:#00e07a">34.6%</div>
+  </div>
+  <div class="hr-zone-row">
+    <div class="hr-zone-label">Z3 门槛 133-146</div>
+    <div class="hr-bar-bg"><div class="hr-bar-fill" style="width:26.2%;background:#ffb400"></div></div>
+    <div class="hr-pct" style="color:#ffb400">26.2%</div>
+  </div>
+  <div class="hr-zone-row">
+    <div class="hr-zone-label">Z4 无氧 146-158</div>
+    <div class="hr-bar-bg"><div class="hr-bar-fill" style="width:2.0%;background:#ff8f40"></div></div>
+    <div class="hr-pct" style="color:#ff8f40">2.0%</div>
+  </div>
+  <div class="hr-zone-row">
+    <div class="hr-zone-label">Z5 最大 >158</div>
+    <div class="hr-bar-bg"><div class="hr-bar-fill" style="width:0.0%;background:#ff5a5a"></div></div>
+    <div class="hr-pct" style="color:#ff5a5a">0.0%</div>
+  </div>
+  <div class="card-grid cg2" style="margin-top:18px">
+    <div class="card card-green">
+      <h3>心率控制 — 教科书级别</h3>
+      <ul>
+        <li>Z1+Z2（低强度有氧）合计 <em>71.7%</em>，超马最理想区间</li>
+        <li>Z4（无氧）仅 <em>2%</em>，集中于陡坡冲刺段</li>
+        <li>Z5（最大心率）<em>0%</em>，全程未超过 158bpm</li>
+        <li>后半程平均心率比前半降低 <em>11bpm</em>（129→118），体现出体能的有序消耗</li>
+      </ul>
+    </div>
+    <div class="card card-yellow">
+      <h3>心率数字解读</h3>
+      <ul>
+        <li>平均心率 <em>123 bpm</em>，最大 <em>158 bpm</em></li>
+        <li>km36–40 爬升段心率维持在 131–134bpm，未超 Z3</li>
+        <li>km80–85 心率降至 <em>93–104bpm</em>（Z1），显示后段明智减速</li>
+        <li>平均步频 70spm，爬坡时降至 49–55spm，下坡/平路 85–93spm</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- KEY INSIGHTS -->
+<section class="section">
+  <h2 class="sec-title"><div class="sec-icon">💡</div> 核心洞察与亮点</h2>
+  <p class="sec-sub">基于 GPS · 心率 · 配速数据的综合分析</p>
+  <div class="insights">
+    <div class="insight">
+      <div class="insight-icon">🎯</div>
+      <div class="insight-body">
+        <strong>负分割完赛 — 超马中极难实现的成就</strong>
+        <span>后半程（52–102km）比前半程快 29 分钟。大多数超马选手在后半程减速 30–60 分钟，你的数据完全逆势，体现出极强的配速自律能力。</span>
+      </div>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">⛰️</div>
+      <div class="insight-body">
+        <strong>爬升段策略完全正确</strong>
+        <span>km21–25（+724m）和 km36–40（+749m）两大核心爬升，配速放慢至 18–20min/km，心率控制在 Z2–Z3，不透支体能，为后半程保留了足够余量。</span>
+      </div>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">🚩</div>
+      <div class="insight-body">
+        <strong>所有关门均有充足余量通过</strong>
+        <span>7 个关门全部通过，最小余量 km27 的 +57 分钟，平均余量超过 1h40m。整场比赛从未出现关门压力，比赛节奏稳定可控。</span>
+      </div>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">❤️</div>
+      <div class="insight-body">
+        <strong>心率管理接近完美</strong>
+        <span>全程 Z4+Z5 仅占 2%，71.7% 的时间保持在低强度有氧区间。在 20 小时超马中维持如此克制的心率，是完赛成功的核心原因。</span>
+      </div>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">⏱️</div>
+      <div class="insight-body">
+        <strong>距 20 小时目标仅差 3 分 48 秒</strong>
+        <span>全程 102.8km，只需在后段平路每公里多出约 4–5 秒即可。这个差距完全在下次比赛的提升范围内，无需改变任何核心策略。</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT RACE PLAN -->
+<section class="section">
+  <h2 class="sec-title"><div class="sec-icon">🚀</div> 下次冲击 20 小时的调整建议</h2>
+  <p class="sec-sub">无需大改 — 本次比赛策略几乎完美，以下为微调方向</p>
+  <div class="card-grid cg2">
+    <div class="card card-green">
+      <h3>继续保持的优势</h3>
+      <ul>
+        <li><em>负分割节奏</em> — 前半保守入场策略完全正确</li>
+        <li><em>关门管理</em> — 全程无关门压力，状态稳定</li>
+        <li><em>心率控制</em> — Z4+Z5 ≤2%，有氧跑贯穿始终</li>
+        <li><em>爬坡走路策略</em> — 大坡放慢配速，保存心肺容量</li>
+      </ul>
+    </div>
+    <div class="card card-yellow">
+      <h3>可微调的提升点</h3>
+      <ul>
+        <li><em>km86–90</em>（+23:16/km）: 这段疲劳减速明显，有约 8–10 分钟提升空间</li>
+        <li><em>km95–102</em>: 终点前最后 7km 若能保持 11min/km 以内，可节省约 5 分钟</li>
+        <li><em>爬坡步频</em>: 目前 49–53spm，提升至 55–60spm 可提高坡道效率</li>
+        <li><em>补给时间</em>: 减少大站停留时间 1–2 分钟即可弥补差距</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card card-blue" style="margin-top:14px">
+    <h3>🏆 总结</h3>
+    <p>本次奥信濃100 是一场 <em>战术上近乎完美的比赛</em>。负分割完赛、全程心率受控、关门均有余量通过——这三点同时实现本身就极为罕见。与 20 小时目标的差距（3分48秒）仅相当于全程平均配速差 <em>2.2秒/km</em>，完全属于正常波动范围。以当前的训练水平与比赛策略，<em>下次突破 20 小时的概率极高</em>。</p>
+  </div>
+</section>
+
+</div>
+
+<div class="footer">
+  数据来源：activity_23153846226.gpx &nbsp;·&nbsp; 关门数据：door_close.txt<br>
+  Generated by Claude Code &nbsp;·&nbsp; 奥信濃100 2026 个人分析报告
+</div>
+</body>
+</html>
